@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Create your account — Setu</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%2316233D%22/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+<div class="auth-wrap">
+  <div class="auth-visual">
+    <a href="/index.html" class="brand">
+      <svg class="mark" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="#F5E9CB"/><circle cx="35" cy="35" r="9" fill="#16233D"/><circle cx="65" cy="65" r="9" fill="#16233D"/><line x1="35" y1="35" x2="65" y2="65" stroke="#16233D" stroke-width="4"/></svg>
+      Setu
+    </a>
+    <div>
+      <h2 style="color:#FCFBF8; font-size: var(--fs-2xl); max-width: 12ch;">Your campus network starts here.</h2>
+      <p style="color: var(--ink-200); max-width: 40ch;">Whether you're looking for guidance or ready to give it back — build your profile in under a minute.</p>
+    </div>
+    <div style="color:var(--ink-400); font-size: var(--fs-xs);">Setu — Student–Alumni Connection Platform</div>
+  </div>
+
+  <div class="auth-form-side">
+    <div class="auth-box">
+      <h1 style="font-size: var(--fs-xl);">Create your account</h1>
+      <p style="color: var(--ink-600); margin-bottom: var(--sp-3);">Already have an account? <a href="/login.html" style="color: var(--brass-700); font-weight:600; text-decoration:none;">Log in</a></p>
+
+      <div class="pill-tab">
+        <button type="button" class="active" id="tabStudent" onclick="setRole('student')">I'm a Student</button>
+        <button type="button" id="tabAlumni" onclick="setRole('alumni')">I'm an Alumnus</button>
+      </div>
+
+      <form id="registerForm">
+        <div class="field">
+          <label for="name">Full name</label>
+          <input class="input" type="text" id="name" required placeholder="e.g. Aditi Sharma">
+        </div>
+        <div class="field">
+          <label for="email">Email address</label>
+          <input class="input" type="email" id="email" required placeholder="you@campus.edu">
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input class="input" type="password" id="password" required minlength="6" placeholder="At least 6 characters">
+        </div>
+        <input type="hidden" id="role" value="student">
+        <button type="submit" class="btn btn-brass btn-block" id="registerBtn">Create account</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script>
+  function setRole(role) {
+    document.getElementById('role').value = role;
+    document.getElementById('tabStudent').classList.toggle('active', role === 'student');
+    document.getElementById('tabAlumni').classList.toggle('active', role === 'alumni');
+  }
+
+  document.getElementById('registerForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('registerBtn');
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const role = document.getElementById('role').value;
+
+    btn.disabled = true; btn.textContent = 'Creating account...';
+    try {
+      const data = await api.post('/auth/register', { name, email, password, role });
+      setSession(data.token, data.user);
+      toast('Account created! Welcome, ' + data.user.name + '.');
+      setTimeout(() => { window.location.href = `/${data.user.role}-dashboard.html`; }, 400);
+    } catch (err) {
+      toast(err.message, 'error');
+      btn.disabled = false; btn.textContent = 'Create account';
+    }
+  });
+
+  (function redirectIfLoggedIn() {
+    const user = getUser();
+    if (user && getToken()) window.location.href = `/${user.role}-dashboard.html`;
+  })();
+</script>
+</body>
+</html>

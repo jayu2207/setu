@@ -1,0 +1,106 @@
+/* =========================================================
+   DESIGN TOKENS — Student–Alumni Connection Platform
+   Theme: "The Bridge" — an academic network, ink & brass
+   ========================================================= */
+:root {
+  /* --- Color: ink navy (authority, academia) + brass (alumni/legacy)
+     + orchard green (growth, mentorship) on a cool paper ground --- */
+  --ink-900: #101B30;
+  --ink-800: #16233D;
+  --ink-700: #22335A;
+  --ink-600: #344876;
+  --ink-400: #6B7B9E;
+  --ink-200: #C7CEDE;
+
+  --brass-700: #8A6414;
+  --brass-600: #B08423;
+  --brass-500: #C89B3C;
+  --brass-300: #E6C878;
+  --brass-100: #F5E9CB;
+
+  --orchard-700: #1F4E3F;
+  --orchard-600: #2F6F58;
+  --orchard-500: #3E8A6D;
+  --orchard-100: #DCEEE5;
+
+  --brick-600: #A6402B;
+  --brick-100: #F3DFD8;
+
+  --paper-0: #FCFBF8;
+  --paper-50: #F5F4EF;
+  --paper-100: #ECEAE2;
+  --paper-line: #DEDACC;
+
+  --ink: var(--ink-800);
+  --ink-soft: var(--ink-600);
+  --accent: var(--brass-500);
+  --accent-deep: var(--brass-700);
+  --success: var(--orchard-600);
+  --danger: var(--brick-600);
+
+  /* --- Type --- */
+  --font-display: 'Fraunces', 'Iowan Old Style', Georgia, serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --fs-xs: 0.78rem;
+  --fs-sm: 0.9rem;
+  --fs-base: 1rem;
+  --fs-md: 1.15rem;
+  --fs-lg: 1.5rem;
+  --fs-xl: 2.1rem;
+  --fs-2xl: 3rem;
+  --fs-3xl: 3.9rem;
+
+  /* --- Space / radius / shadow --- */
+  --sp-1: 0.4rem;
+  --sp-2: 0.8rem;
+  --sp-3: 1.2rem;
+  --sp-4: 1.8rem;
+  --sp-5: 2.6rem;
+  --sp-6: 4rem;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 18px;
+
+  --shadow-card: 0 1px 2px rgba(16, 27, 48, 0.06), 0 8px 24px -12px rgba(16, 27, 48, 0.18);
+  --shadow-pop: 0 12px 32px -8px rgba(16, 27, 48, 0.28);
+
+  --sidebar-w: 264px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background: var(--paper-50);
+  color: var(--ink-800);
+  font-size: var(--fs-base);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  color: var(--ink-900);
+  margin: 0 0 var(--sp-2);
+  line-height: 1.15;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+p { margin: 0 0 var(--sp-2); max-width: 62ch; }
+a { color: inherit; }
+
+::selection { background: var(--brass-300); color: var(--ink-900); }
+
+:focus-visible {
+  outline: 2px solid var(--brass-600);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}

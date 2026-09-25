@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Setu — Student–Alumni Connection Platform</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%2316233D%22/><circle cx=%2235%22 cy=%2235%22 r=%228%22 fill=%22%23C89B3C%22/><circle cx=%2265%22 cy=%2265%22 r=%228%22 fill=%22%23C89B3C%22/><line x1=%2235%22 y1=%2235%22 x2=%2265%22 y2=%2265%22 stroke=%22%23C89B3C%22 stroke-width=%224%22/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/components.css">
+<style>
+  .hero { max-width: 1180px; margin: 0 auto; padding: var(--sp-6) var(--sp-5) var(--sp-6); display: grid; grid-template-columns: 1.1fr 0.9fr; gap: var(--sp-6); align-items: center; }
+  .hero .eyebrow { color: var(--brass-700); font-weight: 600; letter-spacing: 0.02em; margin-bottom: var(--sp-2); font-size: var(--fs-sm); }
+  .hero h1 { font-size: var(--fs-3xl); max-width: 12ch; }
+  .hero p.lead { font-size: var(--fs-md); color: var(--ink-600); max-width: 46ch; margin-bottom: var(--sp-4); }
+  .hero-ctas { display: flex; gap: 0.9rem; flex-wrap: wrap; }
+  .hero-stats { display: flex; gap: var(--sp-5); margin-top: var(--sp-5); }
+  .hero-stats div strong { display: block; font-family: var(--font-display); font-size: var(--fs-lg); color: var(--ink-900); }
+  .hero-stats div span { font-size: var(--fs-xs); color: var(--ink-600); }
+
+  .network-visual { position: relative; }
+
+  section.band { padding: var(--sp-6) var(--sp-5); }
+  .band-inner { max-width: 1180px; margin: 0 auto; }
+  .band-alt { background: var(--ink-900); color: var(--paper-50); }
+  .band-alt h2, .band-alt p { color: var(--paper-50); }
+  .band-alt .muted { color: var(--ink-200); }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-6); align-items: start; }
+  .problem-list, .solution-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--sp-3); }
+  .problem-list li, .solution-list li { display: flex; gap: 0.8rem; align-items: flex-start; }
+  .problem-list .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--brick-600); margin-top: 0.5rem; flex-shrink: 0; }
+  .solution-list .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--brass-500); margin-top: 0.5rem; flex-shrink: 0; }
+
+  .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-3); margin-top: var(--sp-5); }
+  .feature-card { border: 1px solid var(--paper-line); border-radius: var(--radius-md); padding: var(--sp-4); background: var(--paper-0); }
+  .feature-card .ico { width: 40px; height: 40px; border-radius: 10px; background: var(--brass-100); display: flex; align-items: center; justify-content: center; margin-bottom: var(--sp-2); }
+  .feature-card .ico svg { width: 20px; height: 20px; color: var(--brass-700); }
+  .feature-card h3 { font-size: var(--fs-md); margin-bottom: 0.3rem; }
+  .feature-card p { font-size: var(--fs-sm); color: var(--ink-600); margin: 0; }
+
+  .role-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-3); margin-top: var(--sp-5); }
+  .role-card { border-radius: var(--radius-md); padding: var(--sp-4); border: 1px solid rgba(255,255,255,0.14); }
+  .role-card h3 { color: var(--brass-300); font-size: var(--fs-md); }
+  .role-card ul { padding-left: 1.1rem; margin: 0; color: var(--ink-200); font-size: var(--fs-sm); }
+  .role-card li { margin-bottom: 0.3rem; }
+
+  footer { padding: var(--sp-5); text-align: center; color: var(--ink-400); font-size: var(--fs-xs); border-top: 1px solid var(--paper-line); }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; }
+    .two-col, .feature-grid, .role-grid { grid-template-columns: 1fr; }
+    .network-visual { order: -1; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <a href="/index.html" class="brand">
+    <svg class="mark" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="#16233D"/><circle cx="35" cy="35" r="9" fill="#C89B3C"/><circle cx="65" cy="65" r="9" fill="#C89B3C"/><line x1="35" y1="35" x2="65" y2="65" stroke="#C89B3C" stroke-width="4"/></svg>
+    Setu
+  </a>
+  <div style="display:flex; gap:0.7rem;">
+    <a href="/login.html" class="btn btn-ghost">Log in</a>
+    <a href="/register.html" class="btn btn-primary">Join the network</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div>
+    <div class="eyebrow">STUDENT–ALUMNI CONNECTION PLATFORM</div>
+    <h1>The bridge between your campus and your career.</h1>
+    <p class="lead">Setu connects students directly with alumni for mentorship, job and internship opportunities, and campus events — all in one place, instead of scattered across contacts and inboxes.</p>
+    <div class="hero-ctas">
+      <a href="/register.html" class="btn btn-brass">Get started — it's free</a>
+      <a href="#how-it-works" class="btn btn-outline">See how it works</a>
+    </div>
+    <div class="hero-stats">
+      <div><strong>1</strong><span>Common platform</span></div>
+      <div><strong>3</strong><span>Roles connected</span></div>
+      <div><strong>24×7</strong><span>Opportunities open</span></div>
+    </div>
+  </div>
+
+  <div class="network-visual">
+    <svg viewBox="0 0 420 380" width="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#C89B3C" stop-opacity="0.7"/>
+          <stop offset="100%" stop-color="#16233D" stop-opacity="0.35"/>
+        </linearGradient>
+      </defs>
+      <line x1="90" y1="70" x2="230" y2="180" stroke="url(#lineGrad)" stroke-width="2"/>
+      <line x1="230" y1="180" x2="350" y2="90" stroke="url(#lineGrad)" stroke-width="2"/>
+      <line x1="230" y1="180" x2="120" y2="290" stroke="url(#lineGrad)" stroke-width="2"/>
+      <line x1="230" y1="180" x2="330" y2="300" stroke="url(#lineGrad)" stroke-width="2"/>
+      <line x1="90" y1="70" x2="330" y2="300" stroke="#DEDACC" stroke-width="1.5"/>
+      <line x1="350" y1="90" x2="120" y2="290" stroke="#DEDACC" stroke-width="1.5"/>
+
+      <circle cx="230" cy="180" r="30" fill="#16233D"/>
+      <text x="230" y="185" text-anchor="middle" fill="#F5E9CB" font-size="12" font-family="Inter, sans-serif" font-weight="600">Setu</text>
+
+      <circle cx="90" cy="70" r="22" fill="#F5E9CB" stroke="#C89B3C" stroke-width="2"/>
+      <text x="90" y="75" text-anchor="middle" fill="#8A6414" font-size="10" font-family="Inter, sans-serif" font-weight="700">Alumni</text>
+
+      <circle cx="350" cy="90" r="22" fill="#DCEEE5" stroke="#3E8A6D" stroke-width="2"/>
+      <text x="350" y="95" text-anchor="middle" fill="#1F4E3F" font-size="10" font-family="Inter, sans-serif" font-weight="700">Mentor</text>
+
+      <circle cx="120" cy="290" r="22" fill="#ECEAE2" stroke="#16233D" stroke-width="2"/>
+      <text x="120" y="295" text-anchor="middle" fill="#16233D" font-size="10" font-family="Inter, sans-serif" font-weight="700">Student</text>
+
+      <circle cx="330" cy="300" r="22" fill="#F5E9CB" stroke="#C89B3C" stroke-width="2"/>
+      <text x="330" y="298" text-anchor="middle" fill="#8A6414" font-size="9.5" font-family="Inter, sans-serif" font-weight="700">Job</text>
+      <text x="330" y="309" text-anchor="middle" fill="#8A6414" font-size="9.5" font-family="Inter, sans-serif" font-weight="700">Role</text>
+    </svg>
+  </div>
+</section>
+
+<section class="band" id="how-it-works">
+  <div class="band-inner two-col">
+    <div>
+      <h2>Today, the connection is missing.</h2>
+      <ul class="problem-list">
+        <li><span class="dot"></span><p>Students and alumni have no direct, structured way to connect with each other.</p></li>
+        <li><span class="dot"></span><p>Finding the right person for career guidance takes too much searching.</p></li>
+        <li><span class="dot"></span><p>Job and internship opportunities don't reach students in time.</p></li>
+        <li><span class="dot"></span><p>Alumni experience and knowledge stays under-used.</p></li>
+        <li><span class="dot"></span><p>College events and opportunities are scattered, not centralised.</p></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Setu closes that gap.</h2>
+      <ul class="solution-list">
+        <li><span class="dot"></span><p>One shared platform where every student and alumnus builds a profile.</p></li>
+        <li><span class="dot"></span><p>Alumni post jobs and internships; students apply in a click.</p></li>
+        <li><span class="dot"></span><p>Students request mentorship directly from alumni in their target field.</p></li>
+        <li><span class="dot"></span><p>Events and opportunities live in one organised, searchable place.</p></li>
+        <li><span class="dot"></span><p>Admins oversee the whole network — users, postings, and activity.</p></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="band" style="background: var(--paper-100);">
+  <div class="band-inner">
+    <h2 style="text-align:center; max-width:none;">Everything the network needs</h2>
+    <p style="text-align:center; max-width: 60ch; margin: 0 auto;">One connected system for profiles, opportunities, mentorship, and events.</p>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg></div>
+        <h3>Rich profiles</h3>
+        <p>Students showcase branch and skills; alumni share company, role, and experience.</p>
+      </div>
+      <div class="feature-card">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></div>
+        <h3>Jobs &amp; internships</h3>
+        <p>Alumni post real opportunities; students apply and track status in one place.</p>
+      </div>
+      <div class="feature-card">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 6 6 .8-4.5 4.2 1 6-5.5-3-5.5 3 1-6L3 8.8 9 8z"/></svg></div>
+        <h3>Direct mentorship</h3>
+        <p>Send a focused mentorship request to an alumnus in the field you want to grow in.</p>
+      </div>
+      <div class="feature-card">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 3v3M16 3v3"/></svg></div>
+        <h3>Campus events</h3>
+        <p>College events and activities, organised in a single shared calendar.</p>
+      </div>
+      <div class="feature-card">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/></svg></div>
+        <h3>Admin oversight</h3>
+        <p>A control centre to manage users, postings, mentorship, and events network-wide.</p>
+      </div>
+      <div class="feature-card">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h7l-1 8 11-13h-7z"/></svg></div>
+        <h3>Fast &amp; free</h3>
+        <p>No fees, no middlemen — just a direct line between your campus and your career.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band band-alt">
+  <div class="band-inner">
+    <h2 style="text-align:center; max-width:none;">Built for three roles</h2>
+    <p class="muted" style="text-align:center; max-width:60ch; margin:0 auto;">Everyone on the network has exactly the tools they need.</p>
+    <div class="role-grid">
+      <div class="role-card">
+        <h3>Student</h3>
+        <ul>
+          <li>Build a profile with branch, year &amp; skills</li>
+          <li>Browse and apply to jobs / internships</li>
+          <li>Request mentorship from alumni</li>
+          <li>See upcoming campus events</li>
+        </ul>
+      </div>
+      <div class="role-card">
+        <h3>Alumni</h3>
+        <ul>
+          <li>Share your professional profile</li>
+          <li>Post job &amp; internship opportunities</li>
+          <li>Review applicants and respond</li>
+          <li>Accept mentorship requests</li>
+        </ul>
+      </div>
+      <div class="role-card">
+        <h3>Admin</h3>
+        <ul>
+          <li>Oversee every user on the platform</li>
+          <li>Monitor opportunities &amp; mentorship</li>
+          <li>Manage campus events</li>
+          <li>Keep the network healthy</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" style="text-align:center;">
+  <h2>Ready to build your bridge?</h2>
+  <p style="margin: 0 auto var(--sp-4); text-align:center;">Create your profile in under a minute — as a student or as an alumnus.</p>
+  <a href="/register.html" class="btn btn-brass">Create your free account</a>
+</section>
+
+<footer>Setu — Student–Alumni Connection Platform · Built as a college project</footer>
+
+</body>
+</html>
