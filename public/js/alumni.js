@@ -40,6 +40,9 @@ document.getElementById('oppForm').addEventListener('submit', async (e) => {
       company: document.getElementById('o_company').value,
       location: document.getElementById('o_location').value,
       description: document.getElementById('o_description').value,
+      required_skills: document.getElementById('o_skills').value,
+      required_branch: document.getElementById('o_branch').value,
+      min_cgpa: document.getElementById('o_cgpa').value,
       apply_link: document.getElementById('o_link').value,
     });
     toast('Opportunity posted!');
@@ -72,24 +75,59 @@ async function loadMyOpportunities() {
           </div>
         </div>
         <div style="margin-top:0.8rem; border-top:1px solid var(--paper-line); padding-top:0.8rem;">
-          <strong style="font-size:var(--fs-xs); color:var(--ink-600);">APPLICANTS (${o.applicants.length})</strong>
-          ${o.applicants.length === 0 ? '<p style="color:var(--ink-400); font-size:var(--fs-sm); margin-top:0.3rem;">No applicants yet.</p>' : `
-          <div style="margin-top:0.5rem; display:flex; flex-direction:column; gap:0.5rem;">
-            ${o.applicants.map((a) => `
-              <div style="display:flex; justify-content:space-between; align-items:center; background:var(--paper-50); border-radius:var(--radius-sm); padding:0.5rem 0.8rem; flex-wrap:wrap; gap:0.5rem;">
-                <div style="font-size:var(--fs-sm);"><strong>${escapeHtml(a.name)}</strong> · ${escapeHtml(a.email)}</div>
-                <select class="input" style="width:auto; padding:0.3rem 0.6rem; font-size:var(--fs-xs);" onchange="updateAppStatus(${a.application_id}, this.value)">
-                  <option value="applied" ${a.status==='applied'?'selected':''}>Applied</option>
-                  <option value="shortlisted" ${a.status==='shortlisted'?'selected':''}>Shortlisted</option>
-                  <option value="selected" ${a.status==='selected'?'selected':''}>Selected</option>
-                  <option value="rejected" ${a.status==='rejected'?'selected':''}>Rejected</option>
-                </select>
-              </div>
-            `).join('')}
-          </div>`}
+          ${o.required_skills ? `<div style="margin-bottom:0.6rem; font-size:var(--fs-xs); color:var(--ink-600);">REQUIRES: ${o.required_skills.split(',').filter(x=>x.trim()).map(x => `<span class="badge badge-grey">${escapeHtml(x.trim())}</span>`).join(' ')}${o.min_cgpa ? ` <span class="badge badge-navy">CGPA ≥ ${escapeHtml(o.min_cgpa)}</span>` : ''}</div>` : ''}
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+            <strong style="font-size:var(--fs-xs); color:var(--ink-600);">APPLICANTS (${o.applicants.length})</strong>
+            ${o.applicants.length ? `<div style="display:flex; gap:0.6rem; align-items:center; font-size:var(--fs-xs);">
+              <label>Min match
+                <select class="input" id="minMatch-${o.id}" style="width:auto; padding:0.2rem 0.5rem;" onchange="loadApplicants(${o.id})">
+                  <option value="0">Any</option><option value="25">25%+</option><option value="50">50%+</option><option value="75">75%+</option><option value="100">100%</option>
+                </select></label>
+              <label><input type="checkbox" id="eligible-${o.id}" onchange="loadApplicants(${o.id})"> Eligible only</label>
+            </div>` : ''}
+          </div>
+          <div id="appl-${o.id}" style="margin-top:0.5rem; display:flex; flex-direction:column; gap:0.5rem;">
+            ${o.applicants.length === 0 ? '<p style="color:var(--ink-400); font-size:var(--fs-sm); margin-top:0.3rem;">No applicants yet.</p>' : ''}
+          </div>
         </div>
       </div>
     `).join('');
+    opps.filter((o) => o.applicants.length).forEach((o) => loadApplicants(o.id));
+  } catch (err) { toast(err.message, 'error'); }
+}
+
+/* Applicants of one posting, scored against that posting's requirements (server-side filter). */
+async function loadApplicants(oppId) {
+  const wrap = document.getElementById(`appl-${oppId}`);
+  const min = document.getElementById(`minMatch-${oppId}`).value;
+  const eligible = document.getElementById(`eligible-${oppId}`).checked ? 1 : 0;
+  try {
+    const rows = await api.get(`/opportunities/${oppId}/applicants?min_match=${min}&eligible=${eligible}`);
+    if (!rows.length) { wrap.innerHTML = '<p style="color:var(--ink-400); font-size:var(--fs-sm);">No applicants match these filters.</p>'; return; }
+    wrap.innerHTML = rows.map((a) => {
+      const color = a.match_percent >= 75 ? 'badge-green' : a.match_percent >= 40 ? 'badge-gold' : 'badge-red';
+      return `
+      <div style="background:var(--paper-50); border-radius:var(--radius-sm); padding:0.7rem 0.9rem; display:flex; flex-direction:column; gap:0.4rem;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+          <div style="font-size:var(--fs-sm);"><strong>${escapeHtml(a.name)}</strong> · ${escapeHtml(a.email)}
+            <span class="badge ${color}">${a.match_percent}% match</span>
+            ${a.eligible ? '' : '<span class="badge badge-red">Not eligible</span>'}</div>
+          <div style="display:flex; gap:0.4rem; align-items:center;">
+            <button class="btn btn-outline btn-sm" onclick="openResume(${a.student_id})">View resume</button>
+            <select class="input" style="width:auto; padding:0.3rem 0.6rem; font-size:var(--fs-xs);" onchange="updateAppStatus(${a.application_id}, this.value)">
+              ${['applied','shortlisted','selected','rejected'].map((st) => `<option value="${st}" ${a.status===st?'selected':''}>${st[0].toUpperCase()+st.slice(1)}</option>`).join('')}
+            </select>
+          </div>
+        </div>
+        <div style="font-size:var(--fs-xs); color:var(--ink-600);">
+          ${a.branch ? escapeHtml(a.branch) : ''}${a.year ? ' · ' + escapeHtml(a.year) : ''}${a.cgpa ? ' · CGPA ' + escapeHtml(a.cgpa) : ''}
+        </div>
+        <div style="display:flex; gap:0.3rem; flex-wrap:wrap;">
+          ${a.matched_skills.map((x) => `<span class="badge badge-green">✓ ${escapeHtml(x)}</span>`).join('')}
+          ${a.missing_skills.map((x) => `<span class="badge badge-grey">✗ ${escapeHtml(x)}</span>`).join('')}
+        </div>
+      </div>`;
+    }).join('');
   } catch (err) { toast(err.message, 'error'); }
 }
 

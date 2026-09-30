@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views_auth, views_profile, views_opportunities, views_mentorship, views_events, views_admin
+from . import views_auth, views_profile, views_opportunities, views_mentorship, views_events, views_admin, views_resume
 
 urlpatterns = [
     # ---------- auth ----------
@@ -9,6 +9,8 @@ urlpatterns = [
     # ---------- profile ----------
     path('profile/me', views_profile.me),
     path('profile/alumni', views_profile.list_alumni),
+    path('profile/resume', views_resume.my_resume),                          # student: POST upload / DELETE remove
+    path('resume/<int:student_id>', views_resume.resume_download),           # permission-checked download
 
     # ---------- opportunities ----------
     path('opportunities', views_opportunities.opportunities_list),
@@ -16,6 +18,7 @@ urlpatterns = [
     path('opportunities/my/applications', views_opportunities.my_applications),
     path('opportunities/applications/<int:app_id>/status', views_opportunities.application_status),
     path('opportunities/<int:opp_id>', views_opportunities.opportunity_delete),
+    path('opportunities/<int:opp_id>/applicants', views_opportunities.opportunity_applicants),
     path('opportunities/<int:opp_id>/apply', views_opportunities.opportunity_apply),
 
     # ---------- mentorship ----------

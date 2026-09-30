@@ -1,3 +1,5 @@
+from decimal import Decimal, InvalidOperation
+
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.http import JsonResponse
@@ -18,7 +20,7 @@ def me(request):
         profile = None
         if au['role'] == 'student':
             profile = StudentProfile.objects.filter(user_id=au['id']).values(
-                'branch', 'year', 'skills', 'bio', 'avatar'
+                'branch', 'year', 'skills', 'bio', 'avatar', 'cgpa', 'resume_name', 'resume_uploaded_at'
             ).first()
         elif au['role'] == 'alumni':
             profile = AlumniProfile.objects.filter(user_id=au['id']).values(
@@ -29,7 +31,16 @@ def me(request):
     # PUT
     body = parse_body(request)
     if au['role'] == 'student':
+        cgpa = None
+        if body.get('cgpa') not in (None, ''):
+            try:
+                cgpa = Decimal(str(body['cgpa']))
+            except InvalidOperation:
+                return JsonResponse({'error': 'CGPA must be a number.'}, status=400)
+            if not (0 <= cgpa <= 10):
+                return JsonResponse({'error': 'CGPA must be between 0 and 10.'}, status=400)
         StudentProfile.objects.filter(user_id=au['id']).update(
+            cgpa=cgpa,
             branch=body.get('branch') or '',
             year=body.get('year') or '',
             skills=body.get('skills') or '',

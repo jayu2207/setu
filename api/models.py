@@ -23,6 +23,11 @@ class StudentProfile(models.Model):
     skills = models.TextField(blank=True, default='')
     bio = models.TextField(blank=True, default='')
     avatar = models.CharField(max_length=255, blank=True, default='')
+    cgpa = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True)
+    resume = models.FileField(upload_to='resumes/', blank=True, default='')
+    resume_name = models.CharField(max_length=255, blank=True, default='')
+    resume_text = models.TextField(blank=True, default='')  # extracted text, used for skill matching
+    resume_uploaded_at = models.DateTimeField(null=True, blank=True)
 
 
 class AlumniProfile(models.Model):
@@ -47,6 +52,10 @@ class Opportunity(models.Model):
     location = models.CharField(max_length=255, blank=True, default='')
     description = models.TextField(blank=True, default='')
     apply_link = models.CharField(max_length=500, blank=True, default='')
+    # ---- requirements used to filter applicants' resumes ----
+    required_skills = models.TextField(blank=True, default='')      # comma separated
+    required_branch = models.CharField(max_length=255, blank=True, default='')  # comma separated, empty = any
+    min_cgpa = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
 

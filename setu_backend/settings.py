@@ -130,6 +130,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# Uploaded resumes live here. NOT served publicly - only through /api/resume/<id> (permission checked).
+MEDIA_ROOT = BASE_DIR / 'media'
+DATA_UPLOAD_MAX_MEMORY_SIZE = 6 * 1024 * 1024
+
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration

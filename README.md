@@ -156,3 +156,15 @@ ADMIN_PASSWORD=Admin@123
 | API endpoints | तेच | तेच (एकसारखे — frontend ला फरक जाणवत नाही) |
 | Frontend | HTML/CSS/JS | तेच HTML/CSS/JS (जशाच्या तसं) |
 | Run command | `npm start` | `python manage.py runserver 0.0.0.0:5000` |
+
+---
+
+## 📄 Resume upload + requirement-based filtering (नवीन)
+
+- **Student**: My Profile मध्ये PDF/DOCX resume upload (max 5 MB) + CGPA. Resume नसेल तर Apply होत नाही.
+- **Alumni**: Post करताना *Required skills*, *Eligible branches*, *Minimum CGPA* द्या.
+- **My Postings** मध्ये प्रत्येक applicant चा match % (resume + profile skills वरून), matched/missing skills, `View resume`,
+  आणि *Min match* / *Eligible only* filters दिसतात. तिथूनच Shortlist / Select / Reject करता येतं.
+- Resume फाइल्स `media/resumes/` मध्ये राहतात; public URL नाही — फक्त `/api/resume/<student_id>` मधून, permission check सह.
+
+Run केल्यानंतर एकदा: `pip install -r requirements.txt` आणि `python manage.py migrate`

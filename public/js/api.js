@@ -71,7 +71,37 @@ async function apiRequest(path, { method = 'GET', body = null } = {}) {
   return data;
 }
 
+/** Multipart upload (browser sets the Content-Type boundary itself). */
+async function uploadRequest(path, formData) {
+  let res;
+  try {
+    res = await fetch(API_BASE + path, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${getToken()}` },
+      body: formData,
+    });
+  } catch (_) { throw new Error('Cannot reach the server. Please check your connection and try again.'); }
+  let data = {};
+  try { data = await res.json(); } catch (_) {}
+  if (!res.ok) throw new Error(data.error || 'Upload failed. Please try again.');
+  return data;
+}
+
+/** Open a protected resume (needs the JWT header, so a plain <a href> cannot be used). */
+async function openResume(studentId) {
+  const w = window.open('', '_blank');           // open synchronously so popup blockers allow it
+  try {
+    const res = await fetch(`${API_BASE}/resume/${studentId}`, { headers: { 'Authorization': `Bearer ${getToken()}` } });
+    if (!res.ok) { const d = await res.json().catch(() => ({})); throw new Error(d.error || 'Could not open resume.'); }
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    if (blob.type === 'application/pdf') { w.location = url; }
+    else { w.close(); const a = document.createElement('a'); a.href = url; a.download = 'resume.docx'; a.click(); }
+  } catch (err) { if (w) w.close(); toast(err.message, 'error'); }
+}
+
 const api = {
+  upload: (path, formData) => uploadRequest(path, formData),
   get: (path) => apiRequest(path),
   post: (path, body) => apiRequest(path, { method: 'POST', body }),
   put: (path, body) => apiRequest(path, { method: 'PUT', body }),

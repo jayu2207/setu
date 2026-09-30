@@ -69,6 +69,10 @@ async function applyTo(id, btn) {
   } catch (err) {
     toast(err.message, 'error');
     btn.disabled = false; btn.textContent = 'Apply';
+    if (/resume/i.test(err.message)) {   // no resume yet -> take the student to the upload box
+      showSection('profile', document.querySelector(".side-nav a[onclick*=\"'profile'\"]"));
+      loadProfile();
+    }
   }
 }
 
@@ -200,6 +204,8 @@ async function loadProfile() {
       document.getElementById('p_branch').value = profile.branch || '';
       document.getElementById('p_year').value = profile.year || '';
       document.getElementById('p_skills').value = profile.skills || '';
+      document.getElementById('p_cgpa').value = profile.cgpa || '';
+      renderResumeStatus(profile);
       document.getElementById('p_bio').value = profile.bio || '';
     }
   } catch (err) { toast(err.message, 'error'); }
@@ -212,11 +218,41 @@ document.getElementById('profileForm').addEventListener('submit', async (e) => {
       branch: document.getElementById('p_branch').value,
       year: document.getElementById('p_year').value,
       skills: document.getElementById('p_skills').value,
+      cgpa: document.getElementById('p_cgpa').value,
       bio: document.getElementById('p_bio').value,
     });
     toast('Profile saved!');
   } catch (err) { toast(err.message, 'error'); }
 });
+
+/* ---------- RESUME ---------- */
+function renderResumeStatus(profile) {
+  const has = !!(profile && profile.resume_name);
+  document.getElementById('resumeStatus').innerHTML = has
+    ? `Current resume: <strong>${escapeHtml(profile.resume_name)}</strong> <span class="badge badge-green">Uploaded ✓</span>`
+    : 'No resume uploaded yet. You must upload one before you can apply.';
+  document.getElementById('viewResumeBtn').style.display = has ? '' : 'none';
+  document.getElementById('delResumeBtn').style.display = has ? '' : 'none';
+}
+
+async function uploadResume() {
+  const input = document.getElementById('resumeFile');
+  if (!input.files.length) { toast('Please choose a PDF or DOCX file first.', 'error'); return; }
+  const fd = new FormData();
+  fd.append('resume', input.files[0]);
+  try {
+    await api.upload('/profile/resume', fd);
+    toast('Resume uploaded!');
+    input.value = '';
+    loadProfile();
+  } catch (err) { toast(err.message, 'error'); }
+}
+
+async function deleteResume() {
+  if (!confirm('Remove your resume? You will not be able to apply until you upload a new one.')) return;
+  try { await api.del('/profile/resume'); toast('Resume removed.'); loadProfile(); }
+  catch (err) { toast(err.message, 'error'); }
+}
 
 /* ---------- HELPERS ---------- */
 function emptyState(title, sub) {

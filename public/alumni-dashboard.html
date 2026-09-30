@@ -77,6 +77,11 @@
           </div>
           <div class="field"><label>Location</label><input class="input" id="o_location" placeholder="e.g. Pune / Remote"></div>
           <div class="field"><label>Description</label><textarea class="input" id="o_description" placeholder="Role details, requirements, stipend/salary..."></textarea></div>
+          <div class="field"><label>Required skills (comma separated)</label><input class="input" id="o_skills" placeholder="e.g. Python, Django, SQL"></div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap: var(--sp-3);">
+            <div class="field"><label>Eligible branches (optional)</label><input class="input" id="o_branch" placeholder="e.g. Computer, IT"></div>
+            <div class="field"><label>Minimum CGPA (optional)</label><input class="input" id="o_cgpa" type="number" step="0.01" min="0" max="10" placeholder="e.g. 7.0"></div>
+          </div>
           <div class="field"><label>Application link (optional)</label><input class="input" id="o_link" placeholder="https://..."></div>
           <button type="submit" class="btn btn-brass">Post opportunity</button>
         </form>
