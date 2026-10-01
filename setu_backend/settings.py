@@ -23,12 +23,17 @@ load_dotenv(BASE_DIR / '.env')
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-$z02t7_^45vzygq=a%=lcp_1vlm)h-%@((4q^j5!#0qv)#n^n&'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-local-dev-key-only')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+RENDER_HOST = os.environ.get('RENDER_EXTERNAL_HOSTNAME')  # Render sets this automatically
+if RENDER_HOST:
+    ALLOWED_HOSTS.append(RENDER_HOST)
+    CSRF_TRUSTED_ORIGINS = ['https://' + RENDER_HOST]
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # ---------- Setu platform settings (mirrors backend/.env in the Node version) ----------
 PORT = int(os.environ.get('PORT', 5000))
@@ -55,6 +60,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -86,11 +92,14 @@ WSGI_APPLICATION = 'setu_backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
+import dj_database_url
+
+# On Render, DATABASE_URL points to PostgreSQL. Locally it is not set, so SQLite is used.
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600,
+    )
 }
 
 
@@ -129,6 +138,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Uploaded resumes live here. NOT served publicly - only through /api/resume/<id> (permission checked).
 MEDIA_ROOT = BASE_DIR / 'media'
